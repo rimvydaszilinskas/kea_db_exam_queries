@@ -184,4 +184,8 @@ CREATE EVENT collect_daily_stat
         STARTS CURDATE() ON COMPLETION PRESERVE ENABLE
 	DO
 		INSERT INTO rating_at_time(movie, rating, date) 
-			SELECT movies.id, AVG(ratings.rating), CURDATE() FROM movies INNER JOIN ratings ON ratings.movie=movies.id GROUP BY movies.id;
+			SELECT movies.id, AVG(ratings.rating) AS rating, CURDATE() AS DATE 
+            FROM movies 
+            INNER JOIN ratings 
+                ON ratings.movie=movies.id 
+            GROUP BY movies.id;
