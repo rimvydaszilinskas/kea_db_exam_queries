@@ -10,9 +10,9 @@ BEGIN
 
     SELECT languages.name INTO LANG 
 		FROM languages 
-        INNER JOIN movies ON movies.original_language=languages.id 
-        GROUP BY languages.id DESC
-        ORDER BY COUNT(movies.id)
+        LEFT JOIN movies ON movies.original_language=languages.id 
+        GROUP BY languages.id
+        ORDER BY COUNT(movies.id) DESC
         LIMIT 1;
     
     RETURN LANG;
@@ -27,9 +27,9 @@ BEGIN
     
     SELECT languages.name INTO LANG 
 		FROM languages 
-        INNER JOIN movies ON movies.original_language=languages.id 
-        GROUP BY languages.id ASC
-        ORDER BY COUNT(movies.id)
+        LEFT JOIN movies ON movies.original_language=languages.id 
+        GROUP BY languages.id
+        ORDER BY COUNT(movies.id) ASC
         LIMIT 1;
     
     RETURN LANG;

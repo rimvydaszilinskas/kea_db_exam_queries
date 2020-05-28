@@ -14,11 +14,12 @@ SELECT * FROM language_movies;
 -- What is the rating of each movie
 DROP VIEW IF EXISTS movie_ratings;
 CREATE VIEW movie_ratings
-	AS SELECT movies.id, movies.title, AVG(ratings.rating) 
+	AS SELECT movies.id, movies.title, AVG(ratings.rating) AS rating 
 	FROM movies 
 	INNER JOIN ratings 
 		ON movies.id=ratings.movie 
-	GROUP BY movies.id;
+	GROUP BY movies.id
+    ORDER BY rating DESC;
     
 SELECT * FROM movie_ratings;
 

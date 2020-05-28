@@ -104,14 +104,33 @@ END $$
 
 DELIMITER ;
 
+DELIMITER $$
+CREATE TRIGGER movie_length
+BEFORE INSERT
+ON movies FOR EACH ROW
+BEGIN
+	IF new.duration <= 0 THEN
+		SIGNAL SQLSTATE '45000'
+			SET MESSAGE_TEXT = 'No movies take you back to past';
+	END IF;
+END $$
+
+CREATE TRIGGER movie_year
+BEFORE UPDATE
+ON movies FOR EACH ROW
+BEGIN
+	IF new.release_date < 1888 THEN
+		SIGNAL SQLSTATE '45000'
+			SET MESSAGE_TEXT = 'Movies only came after 1888!';
+	END IF;
+END $$
+
+DELIMITER ;
+
 ALTER TABLE rating_at_time ADD UNIQUE unique_date (date, movie);
 ALTER TABLE ratings ADD UNIQUE unique_rating(user_id, movie);
 
-ALTER TABLE ratings ADD CONSTRAINT check_rating CHECK (rating>=1 AND rating<=10);
-
 CREATE UNIQUE INDEX MOVIE_INDEX ON movies(title);
-ALTER TABLE movies ADD CONSTRAINT min_duration CHECK (duration>0);
-ALTER TABLE movies ADD CONSTRAINT date_check CHECK (release_date>1888);
 
 INSERT INTO languages (id, name) VALUES (1, 'English'), (2, 'German'), (3, 'Lithuanian');
 
@@ -176,7 +195,7 @@ VALUES
     (5, 1, 4, 8, 'Wunderbar'),
     (6, 1, 3, 8, 'Loved it');
 
-SET autocommit = OFF;
+-- SET autocommit = OFF;
 
 CREATE EVENT collect_daily_stat
 	ON SCHEDULE 
