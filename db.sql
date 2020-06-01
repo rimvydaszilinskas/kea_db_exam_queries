@@ -4,7 +4,7 @@ USE film;
 
 CREATE TABLE languages (
 	id INT AUTO_INCREMENT PRIMARY KEY,
-	name VARCHAR(20)
+	name VARCHAR(20) UNIQUE
 );
 
 CREATE TABLE movies (
@@ -129,6 +129,9 @@ DELIMITER ;
 
 ALTER TABLE rating_at_time ADD UNIQUE unique_date (date, movie);
 ALTER TABLE ratings ADD UNIQUE unique_rating(user_id, movie);
+ALTER TABLE acted ADD UNIQUE unique_actor(celebrity, movie);
+ALTER TABLE directed ADD UNIQUE unique_director(celebrity, movie);
+ALTER TABLE movie_categories ADD UNIQUE unique_movie_category(movie, category);
 
 CREATE UNIQUE INDEX MOVIE_INDEX ON movies(title);
 
